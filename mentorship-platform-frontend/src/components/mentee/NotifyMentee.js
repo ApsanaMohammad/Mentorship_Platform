@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import api from '../../services/api'; // Import the API service
 
 const NotifyMentee = () => {
   const [requests, setRequests] = useState([]);
@@ -7,10 +8,10 @@ const NotifyMentee = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await fetch(`http://localhost:5226/api/notify/mentee/${menteeId}`);
-        const data = await response.json();
+        const response = await api.get(`/notify/mentee/${menteeId}`); // Use Axios to make the request
+        const data = response.data; // Axios response data is directly accessible here
 
-        if (response.ok) {
+        if (response.status === 200) {
           setRequests(data);
         } else {
           console.error(data.message);
@@ -33,7 +34,14 @@ const NotifyMentee = () => {
             <div className="card-body">
               <p><strong>Request ID:</strong> {request.id}</p>
               <p><strong>Mentor ID:</strong> {request.mentorId}</p>
-              <p><strong>Status:</strong> {request.status}</p>
+              
+              <p><strong>Status:</strong> {
+                request.status.toLowerCase() === 'accepted' 
+                ? 'Your request has been accepted by the mentor!' 
+                : request.status.toLowerCase() === 'rejected' 
+                ? 'Your request has been rejected by the mentor!' 
+                : `The status is still pending. You have not been accepted or rejected yet.`
+              }</p>
             </div>
           </div>
         ))

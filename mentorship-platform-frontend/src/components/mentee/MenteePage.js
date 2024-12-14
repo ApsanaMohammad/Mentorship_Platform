@@ -3,7 +3,6 @@ import NavbarMentee from './NavbarMentee';
 import Footer from '../main/Footer';
 import MentorSuggestions from './MentorSuggestions';
 import Notes from './Notes';
-import RequestMentor from './RequestMentor';
 import NotifyMentee from './NotifyMentee';
 import Profile from '../main/Profile';
 
@@ -21,14 +20,37 @@ const MenteePage = () => {
         return <MentorSuggestions />;
       case 'notes':
         return <Notes />;
-      case 'request-mentor':
-        return <RequestMentor />;
       case 'notify-mentee':
         return <NotifyMentee />;
       case 'profile':
         return <Profile />;
       default:
-        return <p className="lead text-center">Welcome to the Mentee Dashboard!</p>;
+        return (
+          <div className="text-center mt-5">
+            <h2 className="display-4 text-success mb-4">Welcome to the Mentee Dashboard!</h2>
+            <p className="lead text-muted mb-4">
+              We're excited to have you here. Get started by completing your profile, connecting with mentors, and exploring opportunities!
+            </p>
+            <div className="row justify-content-center">
+              <div className="col-md-6">
+                <div className="card shadow-lg">
+                  <div className="card-body">
+                    <h4 className="card-title">How to Get Started</h4>
+                    <ul className="list-group">
+                      <li className="list-group-item">Complete your profile</li>
+                      <li className="list-group-item">Explore available mentors</li>
+                      <li className="list-group-item">Send requests and start learning!</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4">
+              <i className="fas fa-grin-stars fa-3x text-warning"></i>
+              <p className="text-muted mt-3">Let’s make the most of this mentorship journey together!</p>
+            </div>
+          </div>
+        );
     }
   };
 

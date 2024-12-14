@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../../services/api'; // Import the api.js service
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -22,7 +22,8 @@ const Register = () => {
     setSuccess('');
 
     try {
-      const response = await axios.post('http://localhost:5226/api/Auth/register', formData);
+      // Use the api service to make the POST request
+      const response = await api.post('/Auth/register', formData);
       setSuccess(response.data);
       setFormData({
         username: '',
@@ -115,5 +116,3 @@ const Register = () => {
 };
 
 export default Register;
-
-//E:\Virtual internships\mentorship-platform-frontend\src\components\Register.js

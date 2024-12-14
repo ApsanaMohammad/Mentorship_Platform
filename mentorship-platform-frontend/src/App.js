@@ -10,7 +10,6 @@ import MentorSuggestions from './components/mentee/MentorSuggestions';
 import Notes from './components/mentee/Notes';
 import NotifyMentee from './components/mentee/NotifyMentee';
 import NotifyMentor from './components/mentor/NotifyMentor';
-import RequestMentor from './components/mentee/RequestMentor';
 import About from './components/main/About';
 import Contact from './components/main/Contact';
 import Profile from './components/main/Profile';
@@ -48,7 +47,6 @@ function App() {
           <Route path="/mentee" element={<MenteePage />} />
           <Route path="/mentor-suggestions" element={<MentorSuggestions />} />
           <Route path="/notes" element={<Notes />} />
-          <Route path="/request-mentor" element={<RequestMentor />} />
           <Route path="/notify-mentee" element={<NotifyMentee/>} />
           <Route path="/notify-mentor" element={<NotifyMentor/>} />
           <Route path="/about" element={<About />} />

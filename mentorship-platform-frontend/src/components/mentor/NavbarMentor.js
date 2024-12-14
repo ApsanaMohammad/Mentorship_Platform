@@ -1,24 +1,20 @@
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import api from '../../services/api';// Import the api service
 
 const NavbarMentor = ({ setActiveComponent }) => {
-  const navigate = useNavigate();
+  const [error, setError] = useState('');
   const token = localStorage.getItem('token');
-  const userId = localStorage.getItem('id'); 
- 
-  // Handle logout
+  const userId = localStorage.getItem('id');
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     localStorage.removeItem('id');
-    navigate('/login');
+    window.location.href = '/login'; // Redirect to login
   };
 
-  // Handle delete account
   const handleDeleteAccount = async () => {
-    if (!localStorage.getItem('id')) {
+    if (!userId) {
       alert('User ID is not available');
       return;
     }
@@ -27,20 +23,16 @@ const NavbarMentor = ({ setActiveComponent }) => {
 
     if (confirmDelete) {
       try {
-        const response = await fetch(`http://localhost:5226/api/Delete/delete-account/${userId}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
+        const response = await api.delete(`/Delete/delete-account/${userId}`, {
+          headers: { 'Authorization': `Bearer ${token}` },
         });
 
-        if (response.ok) {
-          // On successful account deletion, clear localStorage and redirect to login
+        if (response.status === 200) {
           alert('Your account has been deleted.');
           localStorage.removeItem('token');
           localStorage.removeItem('role');
-          localStorage.removeItem('userId');
-          navigate('/login');
+          localStorage.removeItem('id');
+          window.location.href = '/login'; // Redirect to login after deletion
         } else {
           alert('Failed to delete account. Please try again later.');
         }
@@ -50,7 +42,6 @@ const NavbarMentor = ({ setActiveComponent }) => {
       }
     }
   };
-
 
   return (
     <div className="d-flex flex-column flex-shrink-0 bg-light vh-100 p-3" style={{ width: '250px' }}>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import api from '../../services/api'; // Import the api.js service
 
 const Profile = () => {
   const [username] = useState(localStorage.getItem('username'));
@@ -26,13 +27,10 @@ const Profile = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:5226/api/profile/saveprofile', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(profileData),
-      });
+      // Using the API service instead of fetch
+      const response = await api.post('/profile/saveprofile', profileData);
 
-      if (response.ok) {
+      if (response.status === 200) {
         alert('Profile updated successfully');
         // Update localStorage after successful profile update
         localStorage.setItem('phone', phone);
@@ -44,6 +42,7 @@ const Profile = () => {
       }
     } catch (error) {
       console.error('Error updating profile:', error);
+      alert('Error updating profile');
     }
   };
 

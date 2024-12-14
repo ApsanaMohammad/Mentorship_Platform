@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import api from '../../services/api'; // Import the API service
 
 const NotifyMentor = () => {
   const [requests, setRequests] = useState([]);
@@ -7,10 +8,10 @@ const NotifyMentor = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await fetch(`http://localhost:5226/api/notify/mentor/${mentorId}`);
-        const data = await response.json();
+        const response = await api.get(`/notify/mentor/${mentorId}`); // Use Axios for the request
+        const data = response.data; // Axios response data is directly accessible here
 
-        if (response.ok) {
+        if (response.status === 200) {
           setRequests(data);
         } else {
           console.error(data.message);
@@ -32,8 +33,15 @@ const NotifyMentor = () => {
           <div key={request.id} className="card shadow mb-4">
             <div className="card-body">
               <p><strong>Request ID:</strong> {request.id}</p>
-              <p><strong>Mentee ID:</strong> {"Mentee with Id "+request.menteeId+" requested you"}</p>
-              <p><strong>Status:</strong> {"you did not accept or reject the status is still "+request.status}</p>
+              <p><strong>Mentee ID:</strong> {"Mentee with Id " + request.menteeId + " requested you"}</p>
+              
+              <p><strong>Status:</strong> {
+                request.status.toLowerCase() === 'accepted' 
+                ? 'You accepted the request!' 
+                : request.status.toLowerCase() === 'rejected' 
+                ? 'You rejected the request!' 
+                : `You did not accept or reject. The status is still pending.`
+              }</p>
             </div>
           </div>
         ))

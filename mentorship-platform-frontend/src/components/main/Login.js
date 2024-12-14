@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import api from '../../services/api'; // Correct import path
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -15,14 +16,10 @@ function Login() {
     const loginData = { email, password };
 
     try {
-      const response = await fetch('http://localhost:5226/api/Auth/login', { // Make sure the URL is correct
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(loginData),
-      });
+      const response = await api.post('/Auth/login', loginData); // Use api service
 
-      if (response.ok) {
-        const data = await response.json();
+      if (response.status === 200) {
+        const data = response.data;
 
         // Store the token, username, role, and id in localStorage
         localStorage.setItem('token', data.token);
@@ -37,8 +34,7 @@ function Login() {
           navigate('/mentor');
         }
       } else {
-        const errorData = await response.text();
-        setError(errorData);
+        setError('Invalid login credentials');
       }
     } catch (err) {
       setError('An error occurred. Please try again.');

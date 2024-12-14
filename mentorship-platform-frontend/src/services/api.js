@@ -1,7 +1,9 @@
 import axios from 'axios';
+import environment from '../environment.json'; // Import the environment configuration
 
+// Create Axios instance with dynamic base URL
 const api = axios.create({
-  baseURL: 'http://localhost:5226/api', // Update with your .NET Core API URL
+  baseURL: environment.apiBaseUrl, // Use the URL from environment.json
 });
 
 // Set the authentication token in the request headers

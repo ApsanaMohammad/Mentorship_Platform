@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import api from '../../services/api';  // Import the Axios API instance
 
 const MentorSuggestions = () => {
   const [skills, setSkills] = useState('');
@@ -17,20 +18,14 @@ const MentorSuggestions = () => {
   useEffect(() => {
     const fetchMentors = async () => {
       try {
-        const url = skills
-          ? 'http://localhost:5226/api/mentor/matchmentors'
-          : 'http://localhost:5226/api/mentor/getmentors';
-
-        const response = await fetch(url, {
+        const url = skills ? '/mentor/matchmentors' : '/mentor/getmentors';
+        const response = await api({
           method: skills ? 'POST' : 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: skills ? JSON.stringify({ skills }) : null,
+          url: url,
+          data: skills ? { skills } : undefined,  // Send skills as data if POST
         });
 
-        const data = await response.json();
-        skills ? setMatchedMentors(data) : setMentors(data);
+        skills ? setMatchedMentors(response.data) : setMentors(response.data);
       } catch (error) {
         console.error('Error fetching mentors:', error);
       }
@@ -42,18 +37,11 @@ const MentorSuggestions = () => {
   const handleRequest = (mentorId) => {
     const menteeId = localStorage.getItem('id');
 
-    fetch('http://localhost:5226/api/notify/send', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 
-        mentorId: mentorId,
-        menteeId: menteeId,
-        status: "Pending"  // Ensure status is included
-       }),
+    api.post('/notify/send', {
+      mentorId: mentorId,
+      menteeId: menteeId,
+      status: 'Pending',  // Ensure status is included
     })
-      .then((response) => response.json())
       .then(() => {
         setShowModal(true);
       })
@@ -94,26 +82,25 @@ const MentorSuggestions = () => {
 
       {/* Bootstrap Modal for Notification */}
       {showModal && (
-  <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" ref={modalRef}>
-    <div className="modal-dialog">
-      <div className="modal-content rounded-3 shadow-lg" style={{ maxWidth: '400px' }}>
-        <div className="modal-header border-0">
-          <h5 className="modal-title text-center" style={{ fontSize: '1.25rem', color: '#4CAF50' }}>Success</h5>
-          <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+        <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" ref={modalRef}>
+          <div className="modal-dialog">
+            <div className="modal-content rounded-3 shadow-lg" style={{ maxWidth: '400px' }}>
+              <div className="modal-header border-0">
+                <h5 className="modal-title text-center" style={{ fontSize: '1.25rem', color: '#4CAF50' }}>Success</h5>
+                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+              </div>
+              <div className="modal-body text-center">
+                <p className="fs-5">Your notification has been sent successfully!</p>
+              </div>
+              <div className="modal-footer border-0">
+                <button type="button" className="btn btn-success w-100" onClick={() => setShowModal(false)}>
+                  Okay
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="modal-body text-center">
-          <p className="fs-5">Your notification has been sent successfully!</p>
-        </div>
-        <div className="modal-footer border-0">
-          <button type="button" className="btn btn-success w-100" onClick={() => setShowModal(false)}>
-            Okay
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
-
+      )}
     </div>
   );
 };

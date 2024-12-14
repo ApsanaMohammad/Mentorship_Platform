@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import api from '../../services/api'; // Import the API service
 
 const MenteeRequestsForMentor = () => {
   const [requests, setRequests] = useState([]);
@@ -11,19 +12,17 @@ const MenteeRequestsForMentor = () => {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const response = await fetch(`http://localhost:5226/api/MentorshipRequest/mentor/${mentorId}`, {
+        const response = await api.get(`/MentorshipRequest/mentor/${mentorId}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json',
           },
         });
-   
-        if (!response.ok) {
+
+        if (response.status === 200) {
+          setRequests(response.data);
+        } else {
           throw new Error('Failed to fetch mentee requests');
         }
-   
-        const data = await response.json();
-        setRequests(data);
       } catch (error) {
         console.error('Error fetching mentee requests:', error);
         setError('Failed to fetch mentee requests');
@@ -32,7 +31,6 @@ const MenteeRequestsForMentor = () => {
         setLoading(false); // Stop loading once the data is fetched or error occurs
       }
     };
-   
 
     fetchRequests();
   }, [mentorId, token]);
@@ -40,31 +38,29 @@ const MenteeRequestsForMentor = () => {
   // Handle Accept or Reject action for mentor
   const handleAction = async (requestId, action) => {
     try {
-      const response = await fetch(`http://localhost:5226/api/MentorshipRequest/mentor/accept-reject/${requestId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ action }), // Send action as an object (accept or reject)
-      });
+      const response = await api.put(`/MentorshipRequest/mentor/accept-reject/${requestId}`, 
+        { action },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
 
-      const result = await response.json();
-      if (response.ok) {
+      if (response.status === 200) {
         setRequests((prevRequests) =>
           prevRequests.map((request) =>
             request.id === requestId ? { ...request, status: action === 'accept' ? 'Accepted' : 'Rejected' } : request
           )
         );
-        alert(result.message); // Show success message
+        alert(response.data.message); // Show success message
       } else {
-        alert(result.message); // Show error message
+        alert(response.data.message); // Show error message
       }
     } catch (error) {
       console.error('Error handling action:', error);
     }
   };
-
 
   // Rendering
   return (

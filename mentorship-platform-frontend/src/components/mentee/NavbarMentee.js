@@ -2,6 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { useNavigate } from 'react-router-dom';
+import api from '../../services/api'; // Import the api.js service
 
 const NavbarMentee = ({ setActiveComponent }) => {
   const navigate = useNavigate();
@@ -27,14 +28,13 @@ const NavbarMentee = ({ setActiveComponent }) => {
 
     if (confirmDelete) {
       try {
-        const response = await fetch(`http://localhost:5226/api/Delete/delete-account/${userId}`, {
-          method: 'DELETE',
+        const response = await api.delete(`/Delete/delete-account/${userId}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
         });
 
-        if (response.ok) {
+        if (response.status === 200) {
           // On successful account deletion, clear localStorage and redirect to login
           alert('Your account has been deleted.');
           localStorage.removeItem('token');
@@ -72,17 +72,11 @@ const NavbarMentee = ({ setActiveComponent }) => {
             <i className="fas fa-sticky-note me-2"></i> Notes
           </button>
         </li>
-        {/*<li className="nav-item mb-2">
-          <button className="nav-link btn btn-link text-start" onClick={() => setActiveComponent('request-mentor')}>
-            <i className="fas fa-user-plus me-2"></i> Request Mentor
-          </button>
-        </li> */}
         <li className="nav-item mb-2">
           <button className="nav-link btn btn-link text-start" onClick={() => setActiveComponent('notify-mentee')}>
             <i className="fas fa-bell me-2"></i> Notifications
           </button>
         </li>
-        {/* Logout and Delete Account */}
         <li className="nav-item mt-4">
           <button className="nav-link btn btn-link text-start" onClick={handleLogout}>
             <i className="fas fa-sign-out-alt me-2"></i> Logout
