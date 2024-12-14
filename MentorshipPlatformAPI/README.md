@@ -1,125 +1,51 @@
-Mentorship Platform API Controllers
-This document provides a comprehensive description of the controllers used in the Mentorship Platform API. These controllers handle various functionalities such as user authentication, mentorship matching, request management, and notifications.
+## 5. `AuthController`
 
-1. AuthController
-Purpose
-The AuthController manages user registration, login, and JWT-based authentication.
+### **Description**  
+The `AuthController` manages the core functionalities related to user authentication and authorization in the Mentorship Platform API. It provides endpoints for user registration, secure login, and JWT token generation to manage user sessions effectively.
 
-Endpoints
-Register a New User
+---
 
-Endpoint: POST /api/Auth/register
-Description: Registers a new user (mentor or mentee).
-Request Body:
-json
-Copy code
-{
-  "username": "string",
-  "email": "string",
-  "password": "string",
-  "role": "mentor/mentee"
-}
-Response: Success message or an error if the email already exists.
-Login User
+### **Key Endpoints:**
 
-Endpoint: POST /api/Auth/login
-Description: Authenticates a user and provides a JWT token.
-Request Body:
-json
-Copy code
-{
-  "email": "string",
-  "password": "string"
-}
-Response: JWT token, username, role, and user ID.
-2. DeleteController
-Purpose
-The DeleteController handles the deletion of user accounts.
+- **`POST /api/Auth/register`**  
+  Registers a new user by accepting user details such as username, email, role (mentor or mentee), and password. It first checks if the email already exists, ensuring no duplicates in the system.
+  
+- **`POST /api/Auth/login`**  
+  Authenticates a user using their email and password. Upon successful login, a JWT token is generated along with the user's details (username, role, and ID), which can be used for subsequent requests.
 
-Endpoints
-Delete User Account
-Endpoint: DELETE /api/delete/delete-account/{id}
-Description: Deletes a user account from the database.
-Response: Success message or an error if the user ID is not found.
-3. MentorController
-Purpose
-The MentorController provides functionalities for retrieving mentors and matching them based on user skills.
+---
 
-Endpoints
-Get All Mentors
+### **Features:**
 
-Endpoint: GET /api/Mentor/getmentors
-Description: Retrieves a list of all mentors.
-Response: List of mentor profiles.
-Match Mentors by Skills
+- **Secure Authentication with JWT Tokens**  
+  Ensures secure authentication by generating a JWT token upon successful login, which is used for verifying the user's identity for authorized actions.
 
-Endpoint: POST /api/Mentor/matchmentors
-Description: Matches mentors based on the user's provided skills.
-Request Body:
-json
-Copy code
-"skill1, skill2, skill3"
-Response: List of mentors matching the given skills.
-4. MentorshipRequestController
-Purpose
-The MentorshipRequestController manages mentorship requests, including viewing, accepting, and rejecting requests.
+- **Input Validation & Error Handling**  
+  Handles scenarios like duplicate email registration or incorrect login credentials by providing detailed error messages and responses.
 
-Endpoints
-Get Mentee Requests for a Mentor
+- **Token Expiration & Security**  
+  JWT tokens are configured with an expiration time, enforcing periodic re-authentication and maintaining secure access.
 
-Endpoint: GET /api/MentorshipRequest/mentor/{mentorId}
-Description: Retrieves the latest mentorship requests for a mentor.
-Response: List of mentee requests.
-Accept or Reject a Request
+---
 
-Endpoint: PUT /api/MentorshipRequest/mentor/accept-reject/{requestId}
-Description: Allows a mentor to accept or reject a mentorship request.
-Request Body:
-json
-Copy code
-{
-  "action": "accept/reject"
-}
-Response: Success message or error if the request ID is invalid.
-5. NotifyController
-Purpose
-The NotifyController handles notifications related to mentorship requests and status updates.
+### **Security Considerations:**
 
-Endpoints
-Send a Mentorship Request Notification
+- **Password Storage**  
+  Currently, passwords are stored as plain text. It's highly recommended to implement password hashing (such as bcrypt or SHA-256) for better security.
 
-Endpoint: POST /api/Notify/send
-Description: Sends a notification for a new mentorship request.
-Request Body:
-json
-Copy code
-{
-  "mentorId": 1,
-  "menteeId": 2
-}
-Response: Success message with request details.
-Update Request Status
+- **JWT Token Expiry**  
+  JWT tokens include an expiration time to limit the duration of the session, ensuring secure access and requiring users to reauthenticate after the token expires.
 
-Endpoint: PUT /api/Notify/updatestatus/{id}
-Description: Updates the status of a mentorship request (e.g., Pending, Accepted, Rejected).
-Request Body:
-json
-Copy code
-"Accepted"
-Response: Success message or error for invalid status.
-Get Notifications for Mentee
+---
 
-Endpoint: GET /api/Notify/mentee/{menteeId}
-Description: Retrieves notifications for a specific mentee.
-Response: List of notifications or an error if no notifications exist.
-Get Notifications for Mentor
+### **How It Works:**
 
-Endpoint: GET /api/Notify/mentor/{mentorId}
-Description: Retrieves notifications for a specific mentor.
-Response: List of notifications or an error if no notifications exist.
-General Notes
-Authentication: Protected endpoints use JWT authentication.
-Error Handling: The API returns appropriate HTTP status codes and error messages for failed operations.
-Database: The ApplicationDbContext manages database interactions, including tables such as Registers, Profiles, and MentorshipRequests.
-This API is designed to streamline mentorship matching and ensure efficient communication between mentors and mentees.
+1. **User Registration (`/register`):**  
+   A user sends a `POST` request with their registration details. The system checks for existing emails and then stores the new user in the database.
 
+2. **User Login (`/login`):**  
+   After registration, users can log in by sending their credentials. If correct, the system returns a JWT token for the user’s session.
+
+---
+
+This controller is essential for handling user authentication, ensuring that only authorized users can access sensitive resources within the platform.
