@@ -1,15 +1,15 @@
 Mentorship Platform API Controllers
-This API facilitates core functionalities like user authentication, mentor-mentee interactions, profile management, and notifications. Below is a detailed description of the controllers included in this API.
+This document provides a comprehensive description of the controllers used in the Mentorship Platform API. These controllers handle various functionalities such as user authentication, mentorship matching, request management, and notifications.
 
 1. AuthController
-Purpose:
-The AuthController handles user registration, login, and JWT token generation for authentication.
+Purpose
+The AuthController manages user registration, login, and JWT-based authentication.
 
-Endpoints:
+Endpoints
 Register a New User
 
 Endpoint: POST /api/Auth/register
-Description: Registers a new user (mentor or mentee) with email, username, role, and password.
+Description: Registers a new user (mentor or mentee).
 Request Body:
 json
 Copy code
@@ -19,11 +19,11 @@ Copy code
   "password": "string",
   "role": "mentor/mentee"
 }
-Response: Success message or conflict if the email already exists.
+Response: Success message or an error if the email already exists.
 Login User
 
 Endpoint: POST /api/Auth/login
-Description: Authenticates a user and returns a JWT token along with user details (username, role, and ID).
+Description: Authenticates a user and provides a JWT token.
 Request Body:
 json
 Copy code
@@ -31,65 +31,65 @@ Copy code
   "email": "string",
   "password": "string"
 }
-Response: JWT token, username, role, and user ID or an unauthorized message for invalid credentials.
+Response: JWT token, username, role, and user ID.
 2. DeleteController
-Purpose:
+Purpose
 The DeleteController handles the deletion of user accounts.
 
-Endpoints:
+Endpoints
 Delete User Account
 Endpoint: DELETE /api/delete/delete-account/{id}
-Description: Deletes a user account from both the Registers and Profiles tables.
-Response: Success message or not found if the user ID does not exist.
+Description: Deletes a user account from the database.
+Response: Success message or an error if the user ID is not found.
 3. MentorController
-Purpose:
-The MentorController retrieves mentors and matches mentors based on user skills.
+Purpose
+The MentorController provides functionalities for retrieving mentors and matching them based on user skills.
 
-Endpoints:
+Endpoints
 Get All Mentors
 
 Endpoint: GET /api/Mentor/getmentors
-Description: Retrieves all profiles with the role "mentor".
-Response: List of mentors.
+Description: Retrieves a list of all mentors.
+Response: List of mentor profiles.
 Match Mentors by Skills
 
 Endpoint: POST /api/Mentor/matchmentors
-Description: Matches mentors based on user-provided skills.
-Request Body: A string of comma-separated skills.
+Description: Matches mentors based on the user's provided skills.
+Request Body:
 json
 Copy code
 "skill1, skill2, skill3"
-Response: List of matched mentors based on skills.
+Response: List of mentors matching the given skills.
 4. MentorshipRequestController
-Purpose:
-The MentorshipRequestController manages mentorship requests, including fetching, accepting, or rejecting mentee requests.
+Purpose
+The MentorshipRequestController manages mentorship requests, including viewing, accepting, and rejecting requests.
 
-Endpoints:
+Endpoints
 Get Mentee Requests for a Mentor
 
 Endpoint: GET /api/MentorshipRequest/mentor/{mentorId}
-Description: Retrieves the latest mentee requests for a specific mentor.
-Response: List of requests or a not found message if no requests exist.
-Accept or Reject a Mentorship Request
+Description: Retrieves the latest mentorship requests for a mentor.
+Response: List of mentee requests.
+Accept or Reject a Request
 
 Endpoint: PUT /api/MentorshipRequest/mentor/accept-reject/{requestId}
-Description: Accepts or rejects a mentorship request based on the provided action.
+Description: Allows a mentor to accept or reject a mentorship request.
 Request Body:
 json
 Copy code
 {
   "action": "accept/reject"
 }
-Response: Success message or not found if the request does not exist.
+Response: Success message or error if the request ID is invalid.
 5. NotifyController
-Purpose:
-The NotifyController manages notifications related to mentorship requests.
+Purpose
+The NotifyController handles notifications related to mentorship requests and status updates.
 
-Endpoints:
+Endpoints
 Send a Mentorship Request Notification
 
 Endpoint: POST /api/Notify/send
-Description: Sends a mentorship request notification.
+Description: Sends a notification for a new mentorship request.
 Request Body:
 json
 Copy code
@@ -101,8 +101,8 @@ Response: Success message with request details.
 Update Request Status
 
 Endpoint: PUT /api/Notify/updatestatus/{id}
-Description: Updates the status of a mentorship request (Pending, Accepted, Rejected).
-Request Body: Status string.
+Description: Updates the status of a mentorship request (e.g., Pending, Accepted, Rejected).
+Request Body:
 json
 Copy code
 "Accepted"
@@ -110,15 +110,16 @@ Response: Success message or error for invalid status.
 Get Notifications for Mentee
 
 Endpoint: GET /api/Notify/mentee/{menteeId}
-Description: Fetches notifications for a specific mentee.
-Response: List of notifications or a not found message.
+Description: Retrieves notifications for a specific mentee.
+Response: List of notifications or an error if no notifications exist.
 Get Notifications for Mentor
 
 Endpoint: GET /api/Notify/mentor/{mentorId}
-Description: Fetches notifications for a specific mentor.
-Response: List of notifications or a not found message.
-General Notes:
+Description: Retrieves notifications for a specific mentor.
+Response: List of notifications or an error if no notifications exist.
+General Notes
 Authentication: Protected endpoints use JWT authentication.
-Error Handling: Appropriate error messages and HTTP status codes are returned for failed operations.
-Database: The ApplicationDbContext handles interactions with the database, including tables like Registers, Profiles, and MentorshipRequests.
-This API is designed to streamline mentorship matching and interaction processes, ensuring secure and efficient communication between mentors and mentees.
+Error Handling: The API returns appropriate HTTP status codes and error messages for failed operations.
+Database: The ApplicationDbContext manages database interactions, including tables such as Registers, Profiles, and MentorshipRequests.
+This API is designed to streamline mentorship matching and ensure efficient communication between mentors and mentees.
+
