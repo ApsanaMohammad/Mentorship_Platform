@@ -136,105 +136,14 @@ MENTORSHIP-PLATFORM-FRONTEND/
 ### 7. **Notifications**
 - Real-time notifications for mentorship requests and updates.
 
----
 
-## ⚙️ **System Configuration**
 
-### **Prerequisites**
 
-- **Node.js** (for frontend)  
-  Download: [https://nodejs.org/](https://nodejs.org/)
+ 
 
-- **.NET 6 SDK** (for backend)  
-  Download: [https://dotnet.microsoft.com/download/dotnet/6.0](https://dotnet.microsoft.com/download/dotnet/6.0)
 
-- **MySQL Server**  
-  Download: [https://dev.mysql.com/downloads/](https://dev.mysql.com/downloads/)
 
-### **Frontend Installation**
 
-1. Navigate to the frontend folder:
-   ```bash
-   cd MENTORSHIP-PLATFORM-FRONTEND
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Run the frontend application:
-   ```bash
-   npm start
-   ```
-
-### **Backend Installation**
-
-1. Navigate to the backend folder:
-   ```bash
-   cd MentorshipPlatformAPI
-   ```
-
-2. Restore dependencies:
-   ```bash
-   dotnet restore
-   ```
-
-3. Update the database:
-   ```bash
-   dotnet ef database update
-   ```
-
-4. Run the backend API:
-   ```bash
-   dotnet run
-   ```
-
-### **MySQL Configuration**
-
-Update the database connection string in `appsettings.json`:
-
-```json
-"ConnectionStrings": {
-  "DefaultConnection": "Server=YOUR_SERVER;Database=YOUR_DB;User=YOUR_USER;Password=YOUR_PASSWORD;"
-}
-```
-
----
-
-## 📸 **Screenshots**
-
-1. **Landing Page**  
-   ![Landing Page](link-to-landing-page-screenshot)
-
-2. **Mentee Dashboard**  
-   ![Mentee Dashboard](link-to-mentee-dashboard-screenshot)
-
-3. **Mentor Dashboard**  
-   ![Mentor Dashboard](link-to-mentor-dashboard-screenshot)
-
-4. **Notifications**  
-   ![Notifications](link-to-notifications-screenshot)
-
----
-
-## 🤝 **Contributing**
-
-Contributions are welcome! Feel free to open issues or submit pull requests.
-
-1. Fork the repository.
-2. Create a new branch: `git checkout -b feature/your-feature`.
-3. Commit your changes: `git commit -m "Add new feature"`.
-4. Push the branch: `git push origin feature/your-feature`.
-5. Open a pull request.
-
----
-
-## 📜 **License**
-
-This project is licensed under the [MIT License](LICENSE).
-
----
 
 ## 📞 **Contact**
 
